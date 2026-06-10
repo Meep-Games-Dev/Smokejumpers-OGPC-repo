@@ -1,13 +1,13 @@
-using NUnit.Framework;
-using UnityEngine;
-using UnityEngine.InputSystem;
-using System.Collections.Generic;
-using System;
-using Unity.Cinemachine;
 using JetBrains.Annotations;
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using Unity.Cinemachine;
 using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem;
 
 public class Helicopter : MonoBehaviour
 {
@@ -85,10 +85,10 @@ public class Helicopter : MonoBehaviour
     public Animator heliAnimator;
     bool titleScreen;
     [Header("Camera")]
-    public Vector3 titleScreenFollowOffset = new Vector3(4,4,5 ); 
-    public Vector3 gameFollowOffset = new Vector3(0,30,0.6f);
-    public Vector3 titleScreenFollowRot = new Vector3(25,-158,0);
-    public Vector3 gameFollowRot = new Vector3(90,0,0);
+    public Vector3 titleScreenFollowOffset = new Vector3(4, 4, 5);
+    public Vector3 gameFollowOffset = new Vector3(0, 30, 0.6f);
+    public Vector3 titleScreenFollowRot = new Vector3(25, -158, 0);
+    public Vector3 gameFollowRot = new Vector3(90, 0, 0);
     [HideInInspector] public GameObject pauseUI;
     [HideInInspector] public List<GameObject> fracturedHeliObjs;
 
@@ -115,7 +115,7 @@ public class Helicopter : MonoBehaviour
         restart = inputs.General.Restart;
         pause = inputs.General.Pause;
         ejectPassengers = inputs.General.Ejectpassengers;
-        
+
         cinemachineCam = Instantiate(cameraPrefab).GetComponent<CinemachineCamera>();
         cinemachineCam.Follow = transform;
 
@@ -124,7 +124,7 @@ public class Helicopter : MonoBehaviour
         roterSoundSource.Play();
 
         mapGenerator = FindFirstObjectByType<MapGenerator>();
-        startingRot = new Quaternion(0,0,0,0);
+        startingRot = new Quaternion(0, 0, 0, 0);
         //Debug.Log("startingRot " +  startingRot);
     }
 
@@ -240,7 +240,7 @@ public class Helicopter : MonoBehaviour
                 }
 
             }
-            for(int i = 0; i < mapGenerator.fireFighterDropOffPoints.Count; i++)
+            for (int i = 0; i < mapGenerator.fireFighterDropOffPoints.Count; i++)
             {
                 if (heliCollider.touching && mapGenerator.fireFighterDropOffPoints[i].Contains(new Vector2(transform.position.x, transform.position.z)))
                 {
@@ -278,11 +278,11 @@ public class Helicopter : MonoBehaviour
         }
         touching = heliCollider.touching;
         Helipad helipad;
-        if(heliCollider.touching == false && !titleScreen)
+        if (heliCollider.touching == false && !titleScreen)
         {
             fuelEfficency = fuelCurve.Evaluate(transform.position.y / maxHeight) * 4;
         }
-        else if(heliCollider.touchingObj.TryGetComponent<Helipad>(out helipad) && fuel < initialFuel && heliCollider.touchingObj)
+        else if (heliCollider.touchingObj.TryGetComponent<Helipad>(out helipad) && fuel < initialFuel && heliCollider.touchingObj)
         {
             if (helipad.gasStation)
             {
@@ -294,7 +294,7 @@ public class Helicopter : MonoBehaviour
             }
         }
 
-        else 
+        else
         {
             fuelEfficency = 0;
         }/*
@@ -399,11 +399,11 @@ public class Helicopter : MonoBehaviour
 
             }
 
-            
+
             transform.rotation = new Quaternion(transform.rotation.x, physicsHeli.transform.rotation.y, transform.rotation.z, transform.rotation.w);
-            if(!tiltF.IsPressed() && !tiltB.IsPressed() && !tiltL.IsPressed() && !tiltR.IsPressed() && !touching)
+            if (!tiltF.IsPressed() && !tiltB.IsPressed() && !tiltL.IsPressed() && !tiltR.IsPressed() && !touching)
             {
-                if(xAngle <= -1.5 || xAngle >= 1.5)
+                if (xAngle <= -1.5 || xAngle >= 1.5)
                 {
                     if (xAngle > 0)
                     {
@@ -418,9 +418,9 @@ public class Helicopter : MonoBehaviour
                 {
                     transform.rotation = new Quaternion(0, transform.rotation.y, transform.rotation.z, transform.rotation.w);
                 }
-                
 
-                
+
+
                 if (zAngle <= -1.5 || zAngle >= 1.5)
                 {
                     if (zAngle > 0)
@@ -436,17 +436,17 @@ public class Helicopter : MonoBehaviour
                 {
                     transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 0, transform.rotation.w);
                 }
-                
+
 
             }
-            
+
 
         }
-        else if(fuel <= 0)
+        else if (fuel <= 0)
         {
             rb.mass = 1;
         }
-        else if(!mapGenerator.playableMapSize.Contains(new Vector2(transform.position.x, transform.position.z)) && crashed == false)
+        else if (!mapGenerator.playableMapSize.Contains(new Vector2(transform.position.x, transform.position.z)) && crashed == false)
         {
 
             Crash();
@@ -461,7 +461,7 @@ public class Helicopter : MonoBehaviour
             //transform.rotation = rb.rotation;
             if (fuel <= 0 && heliCollider.touching && crashed == false)
             {
-                
+
                 Crash();
                 rb.freezeRotation = false;
             }
@@ -473,13 +473,13 @@ public class Helicopter : MonoBehaviour
             //rb.rotation = new Quaternion(0, rb.rotation.y, 0, rb.rotation.w);
             rb.useGravity = false;
         }
-        if(fuel < (initialFuel / 4) && crashed == false && heliAudioSource.isPlaying == false)
+        if (fuel < (initialFuel / 4) && crashed == false && heliAudioSource.isPlaying == false)
         {
             heliAudioSource.clip = fuelWarningSound;
             heliAudioSource.loop = true;
             heliAudioSource.Play();
         }
-        else if(heliAudioSource.clip == fuelWarningSound && fuel > (initialFuel / 4) && heliAudioSource.isPlaying)
+        else if (heliAudioSource.clip == fuelWarningSound && fuel > (initialFuel / 4) && heliAudioSource.isPlaying)
         {
             heliAudioSource.Stop();
         }
@@ -505,12 +505,12 @@ public class Helicopter : MonoBehaviour
                 Time.timeScale = 0f;
             }
         }
-        if(fracturedHeliObjs.Count > 2)
+        if (fracturedHeliObjs.Count > 2)
         {
             Destroy(fracturedHeliObjs[0]);
             fracturedHeliObjs.RemoveAt(0);
         }
-        
+
     }
     public void Respawn()
     {
@@ -531,10 +531,11 @@ public class Helicopter : MonoBehaviour
         citizens = 0;
         fireFighters = 0;
         fuel = initialFuel;
-        while((rb.transform.position != spawnPoint))
+        Debug.Log(spawnPoint);
+        while ((rb.transform.position != spawnPoint))
         {
-            transform.position = spawnPoint;
-            transform.rotation = startingRot;
+            //transform.position = spawnPoint;
+            //transform.rotation = startingRot;
             rb.transform.position = spawnPoint;
             rb.transform.rotation = startingRot;
         }
@@ -550,11 +551,11 @@ public class Helicopter : MonoBehaviour
         capacity = 0;
         Instantiate(explosionPrefab, transform.position, Quaternion.identity);
         GameObject fracturedHeli = Instantiate(fracturedHeliPrefab, transform.position, Quaternion.identity);
-        for(int i = 0; i < fracturedHeli.GetComponentsInChildren<Rigidbody>().Length; i++)
+        for (int i = 0; i < fracturedHeli.GetComponentsInChildren<Rigidbody>().Length; i++)
         {
             fracturedHeli.GetComponentsInChildren<Rigidbody>()[i].AddExplosionForce(30, transform.position, 100);
         }
-        for(int i = 0; i < gameObject.GetComponentsInChildren<MeshRenderer>().Length; i++)
+        for (int i = 0; i < gameObject.GetComponentsInChildren<MeshRenderer>().Length; i++)
         {
             gameObject.GetComponentsInChildren<MeshRenderer>()[i].enabled = false;
         }

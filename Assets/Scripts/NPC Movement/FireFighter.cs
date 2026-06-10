@@ -50,28 +50,29 @@ public class FireFighter : MonoBehaviour
         rb.linearVelocity = Vector3.zero;
         if (!alreadyOnHeli)
         {
-             if (helicopter.touching && heliCollider.touchingObj.tag == "helipad")
-             {
+            Debug.Log(helicopter);
+            if (helicopter.touching && heliCollider.touchingObj.CompareTag("helipad"))
+            {
 
 
-                 GameObject closestEntrance = helicopter.entrances[0];
-                 for (int i = 1; i < helicopter.entrances.Count; i++)
-                 {
-                     if (Vector3.Distance(helicopter.entrances[i].transform.position, transform.position) < Vector3.Distance(closestEntrance.transform.position, transform.position))
-                     {
-                         closestEntrance = helicopter.entrances[i].gameObject;
-                     }
-                 }
-                 agent.SetDestination(closestEntrance.transform.position);
-                 animator.speed = 3;
-             }
-             else
-             {
-                 agent.SetDestination(startingPos);
-                 animator.speed = 3;
-             }
-
+                GameObject closestEntrance = helicopter.entrances[0];
+                for (int i = 1; i < helicopter.entrances.Count; i++)
+                {
+                    if (Vector3.Distance(helicopter.entrances[i].transform.position, transform.position) < Vector3.Distance(closestEntrance.transform.position, transform.position))
+                    {
+                        closestEntrance = helicopter.entrances[i].gameObject;
+                    }
+                }
+                agent.SetDestination(closestEntrance.transform.position);
+                animator.speed = 3;
             }
+            else
+            {
+                agent.SetDestination(startingPos);
+                animator.speed = 3;
+            }
+
+        }
         else
         {
             agent.SetDestination(finalPos);
@@ -80,10 +81,10 @@ public class FireFighter : MonoBehaviour
         {
             helicopter.capacity++;
             helicopter.fireFighters++;
-                
+
             Destroy(this.gameObject);
         }
-        if(!helicopter.touching && touchingFireStationDoor)
+        if (!helicopter.touching && touchingFireStationDoor)
         {
             MapGenerator.helipads[helipadIndex].fireFightersDeployed--;
             Destroy(this.gameObject);
@@ -139,7 +140,7 @@ public class FireFighter : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        if(other.gameObject == onTriggerObj)
+        if (other.gameObject == onTriggerObj)
         {
             onTriggerObj = null;
         }
